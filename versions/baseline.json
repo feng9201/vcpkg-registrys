@@ -3,6 +3,10 @@
     "log-cpp": {
       "baseline": "0.0.2",
       "port-version": 2
+    },
+	"x264": {
+      "baseline": "0.164.3108",
+      "port-version": 2
     }
   }
 }
