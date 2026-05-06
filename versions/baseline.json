@@ -7,6 +7,10 @@
 	"x264": {
       "baseline": "0.164.3108",
       "port-version": 2
+    },
+	"ffmpeg": {
+      "baseline": "5.1.2",
+      "port-version": 1
     }
   }
 }

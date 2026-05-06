@@ -1,0 +1,79 @@
+From 3763d9344b3faf4480b851a4f31ed003ffeb8e6e Mon Sep 17 00:00:00 2001
+From: cuiqiusong <cuiqiusong@ovopark.com>
+Date: Tue, 30 Sep 2025 13:42:49 +0800
+Subject: [PATCH] hevc-missingref-upload
+
+---
+ libavcodec/hevc_refs.c | 28 +++++++++++++++++++++++++++-
+ libavcodec/hevcdec.h   |  2 ++
+ 2 files changed, 29 insertions(+), 1 deletion(-)
+
+diff --git a/libavcodec/hevc_refs.c b/libavcodec/hevc_refs.c
+index 6a70c81..1fb8793 100644
+--- a/libavcodec/hevc_refs.c
++++ b/libavcodec/hevc_refs.c
+@@ -178,7 +178,18 @@ int ff_hevc_output_frame(HEVCContext *s, AVFrame *out, int flush)
+     do {
+         int nb_output = 0;
+         int min_poc   = INT_MAX;
+-        int i, min_idx, ret;
++        int i, min_idx, ret, max_miss_idx;
++        int max_miss_poc = INT_MIN;
++
++        for (i = 0; i < FF_ARRAY_ELEMS(s->DPB); i++) {
++            HEVCFrame *frame = &s->DPB[i];
++            if(frame->missing_ref_flag){
++                if(max_miss_poc < frame->poc){
++                    max_miss_poc = frame->poc;
++                    max_miss_idx = i;
++                }
++            }
++        }
+ 
+         if (s->sh.no_output_of_prior_pics_flag == 1 && s->no_rasl_output_flag == 1) {
+             for (i = 0; i < FF_ARRAY_ELEMS(s->DPB); i++) {
+@@ -211,6 +222,20 @@ int ff_hevc_output_frame(HEVCContext *s, AVFrame *out, int flush)
+             HEVCFrame *frame = &s->DPB[min_idx];
+ 
+             ret = av_frame_ref(out, frame->needs_fg ? frame->frame_grain : frame->frame);
++
++            // 透传 missing_ref_flag
++            if ( max_miss_poc + 1 == frame->poc){
++                av_log(s->avctx, AV_LOG_ERROR, "missing_ref_flag poc %d\n",frame->poc);
++                out->decode_error_flags |= FF_DECODE_ERROR_MISSING_REFERENCE;
++                av_log(s->avctx, AV_LOG_ERROR, "frame is key:%d\n",out->key_frame);
++                
++                HEVCFrame *frame = &s->DPB[max_miss_idx];
++                frame->missing_ref_flag = 0;
++                // av_dict_set(&out->metadata, "missing_ref_flag", "1", 0);
++            }else{
++                out->decode_error_flags &= ~FF_DECODE_ERROR_MISSING_REFERENCE;
++            }
++            
+             if (frame->flags & HEVC_FRAME_FLAG_BUMPING)
+                 ff_hevc_unref_frame(s, frame, HEVC_FRAME_FLAG_OUTPUT | HEVC_FRAME_FLAG_BUMPING);
+             else
+@@ -418,6 +443,7 @@ static HEVCFrame *generate_missing_ref(HEVCContext *s, int poc)
+     frame->poc      = poc;
+     frame->sequence = s->seq_decode;
+     frame->flags    = 0;
++    frame->missing_ref_flag = 1; // 只在这里设置
+ 
+     if (s->threads_type == FF_THREAD_FRAME)
+         ff_thread_report_progress(&frame->tf, INT_MAX, 0);
+diff --git a/libavcodec/hevcdec.h b/libavcodec/hevcdec.h
+index f6acf84..e9f6599 100644
+--- a/libavcodec/hevcdec.h
++++ b/libavcodec/hevcdec.h
+@@ -419,6 +419,8 @@ typedef struct HEVCFrame {
+      * A combination of HEVC_FRAME_FLAG_*
+      */
+     uint8_t flags;
++
++    int missing_ref_flag; // 新增
+ } HEVCFrame;
+ 
+ typedef struct HEVCLocalContext {
+-- 
+2.45.2.windows.1
+
