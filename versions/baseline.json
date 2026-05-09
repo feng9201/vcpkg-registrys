@@ -11,6 +11,10 @@
 	"ffmpeg": {
       "baseline": "5.1.2",
       "port-version": 1
+    },
+	"mttool": {
+      "baseline": "1.0.2",
+      "port-version": 0
     }
   }
 }

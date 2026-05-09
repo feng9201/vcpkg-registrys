@@ -1,0 +1,4 @@
+mttoll provides CMake targets:
+
+find_package(mttool CONFIG REQUIRED)
+target_link_libraries(main PRIVATE mttool:mttool)
