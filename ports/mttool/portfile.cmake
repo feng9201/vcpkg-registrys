@@ -2,7 +2,6 @@ vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/mttool
     REF 710070dad8d25ecb28fcdecf317f15d25f24c05a
-    SHA512 0
 )
 
 set(ENABLE_EVENTPP OFF)
@@ -10,19 +9,21 @@ if("eventpp" IN_LIST FEATURES)
     set(ENABLE_EVENTPP ON)
 endif()
 
-# 手动运行 cmake configure + install（vcpkg 内置函数，无需额外 include）
+# 仅 configure，不设置 CMAKE_INSTALL_PREFIX（避免分号问题）
 vcpkg_execute_required_process(
     COMMAND "${CMAKE_COMMAND}"
         -S "${SOURCE_PATH}"
         -B "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel"
         -DMT_TOOL_ENABLE_EVENTPP=${ENABLE_EVENTPP}
-        -DCMAKE_INSTALL_PREFIX="${CURRENT_PACKAGES_DIR}"
     WORKING_DIRECTORY "${SOURCE_PATH}"
     LOGNAME configure
 )
 
+# install 时通过 --prefix 指定目标路径
 vcpkg_execute_required_process(
-    COMMAND "${CMAKE_COMMAND}" --install "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel"
+    COMMAND "${CMAKE_COMMAND}"
+        --install "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel"
+        --prefix "${CURRENT_PACKAGES_DIR}"
     WORKING_DIRECTORY "${SOURCE_PATH}"
     LOGNAME install
 )
