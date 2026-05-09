@@ -1,7 +1,7 @@
 {
   "name": "mttool",
-  "version": "1.0.2",
-  "port-version": 1,
+  "version": "1.0.3",
+  "port-version": 0,
   "description": "header-only library",
   "homepage": "https://github.com/feng9201/mttool",
   "dependencies": [],
