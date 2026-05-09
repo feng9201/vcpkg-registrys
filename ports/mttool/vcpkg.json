@@ -1,10 +1,9 @@
 {
   "name": "mttool",
   "version": "1.0.2",
-  "port-version": 0,
+  "port-version": 1,
   "description": "header-only library",
   "homepage": "https://github.com/feng9201/mttool",
-  "supports": "!static",
   "dependencies": [],
   "license": "MIT",
   "default-features": [],

@@ -1,3 +1,6 @@
+include(vcpkg-cmake)
+include(vcpkg-cmake-config)
+
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/mttool
@@ -5,7 +8,6 @@ vcpkg_from_git(
     SHA512 0
 )
 
-# eventpp 通过 CMake option 控制
 set(ENABLE_EVENTPP OFF)
 if("eventpp" IN_LIST FEATURES)
     set(ENABLE_EVENTPP ON)
@@ -19,7 +21,6 @@ vcpkg_cmake_configure(
 
 vcpkg_cmake_install()
 
-# 安装版权文件
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/LICENSE"
     DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}"
     RENAME copyright
