@@ -9,7 +9,11 @@ if("eventpp" IN_LIST FEATURES)
     set(ENABLE_EVENTPP ON)
 endif()
 
-# 仅 configure，不设置 CMAKE_INSTALL_PREFIX（避免分号问题）
+# 清除 CMake 旧缓存，防止源路径变更后 cache 不匹配
+file(REMOVE "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/CMakeCache.txt")
+file(REMOVE_RECURSE "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/CMakeFiles")
+
+# 仅 configure
 vcpkg_execute_required_process(
     COMMAND "${CMAKE_COMMAND}"
         -S "${SOURCE_PATH}"
@@ -19,7 +23,7 @@ vcpkg_execute_required_process(
     LOGNAME configure
 )
 
-# install 时通过 --prefix 指定目标路径
+# install
 vcpkg_execute_required_process(
     COMMAND "${CMAKE_COMMAND}"
         --install "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel"
