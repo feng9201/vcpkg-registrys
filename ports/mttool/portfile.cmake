@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/mttool
-    REF 710070dad8d25ecb28fcdecf317f15d25f24c05a
+    REF 8253753c3c284242869fe243f194f519e14b8418
 )
 
 set(ENABLE_EVENTPP OFF)

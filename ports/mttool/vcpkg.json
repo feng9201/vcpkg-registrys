@@ -1,6 +1,6 @@
 {
   "name": "mttool",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "port-version": 0,
   "description": "header-only library",
   "homepage": "https://github.com/feng9201/mttool",
