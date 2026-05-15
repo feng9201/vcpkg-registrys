@@ -1,7 +1,7 @@
 {
   "name": "mttool",
-  "version": "1.0.5",
-  "port-version": 1,
+  "version": "1.1.0",
+  "port-version": 0,
   "description": "header-only library",
   "homepage": "https://github.com/feng9201/mttool",
   "dependencies": [],
@@ -10,6 +10,14 @@
   "features": {
     "eventpp": {
       "description": "Install eventpp event library",
+      "dependencies": []
+    },
+    "spsc": {
+      "description": "Install spsc queue library",
+      "dependencies": []
+    },
+    "mpmc": {
+      "description": "Install mpmc queue library",
       "dependencies": []
     }
   }
