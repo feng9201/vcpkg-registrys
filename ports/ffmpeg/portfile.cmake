@@ -1,13 +1,29 @@
-vcpkg_minimum_required(VERSION 2022-05-05) # for ${VERSION}
+vcpkg_minimum_required(VERSION 2022-10-12) # for ${VERSION}
 
 vcpkg_from_github(
     OUT_SOURCE_PATH SOURCE_PATH
     REPO ffmpeg/ffmpeg
     REF n${VERSION}
-    SHA512 1c4847fc0b17712bd22feafc4ebc0d890b1791be6438d9bee8b74adcb324ce6cda7b6c9a2407e3de319567e123e05f8eb661f49f9651386672ef7036a99d3599
+    SHA512 1b90c38b13149f2de7618ad419adc277afd5e65bbf52b849a7245aec0f92f73189c8547599dba8408b8828a767c1120f132727b57cd6231cd8b81de2471a4b8b
     HEAD_REF master
     PATCHES
+        0001-create-lib-libraries.patch
+        0002-fix-msvc-link.patch #upstreamed in future version
+        0003-fix-windowsinclude.patch
+        0004-fix-debug-build.patch
+        0005-fix-nasm.patch #upstreamed in future version
+        0006-fix-StaticFeatures.patch
+        0007-fix-lib-naming.patch
+        0009-Fix-fdk-detection.patch
+        0011-Fix-x265-detection.patch
+        0012-Fix-ssl-110-detection.patch
         0013-define-WINVER.patch
+		0014-fix-flv-support-hevc.patch
+        0015-Fix-xml2-detection.patch
+        0020-fix-aarch64-libswscale.patch
+        0022-fix-iconv.patch
+        0024-fix-gcc13-binutils.patch
+		0025-hevc-missingref-upload.patch
 )
 
 if(SOURCE_PATH MATCHES " ")
@@ -314,12 +330,6 @@ else()
     set(OPTIONS "${OPTIONS} --disable-libfribidi")
 endif()
 
-if("harfbuzz" IN_LIST FEATURES)
-    set(OPTIONS "${OPTIONS} --enable-libharfbuzz")
-else()
-    set(OPTIONS "${OPTIONS} --disable-libharfbuzz")
-endif()
-
 if("iconv" IN_LIST FEATURES)
     set(OPTIONS "${OPTIONS} --enable-iconv")
 else()
@@ -511,11 +521,6 @@ set(OPTIONS_CROSS "--enable-cross-compile")
 # ffmpeg needs --cross-prefix option to use appropriate tools for cross-compiling.
 if(VCPKG_DETECTED_CMAKE_C_COMPILER MATCHES "([^\/]*-)gcc$")
     string(APPEND OPTIONS_CROSS " --cross-prefix=${CMAKE_MATCH_1}")
-elseif(VCPKG_CMAKE_SYSTEM_NAME STREQUAL "Android" OR VCPKG_TARGET_IS_MINGW)
-    # keep cross-compile for Android/MinGW cross builds
-else()
-    # Native build (MSVC on Windows, Linux, macOS) - no cross-compile needed
-    set(OPTIONS_CROSS "--disable-cross-compile")
 endif()
 
 if(VCPKG_TARGET_ARCHITECTURE STREQUAL "x64")
@@ -541,7 +546,7 @@ if(VCPKG_TARGET_IS_UWP)
     string(APPEND OPTIONS " --extra-ldflags=-APPCONTAINER --extra-ldflags=WindowsApp.lib")
 endif()
 
-set(OPTIONS_DEBUG "--disable-optimizations")
+set(OPTIONS_DEBUG "--debug --disable-optimizations")
 set(OPTIONS_RELEASE "--enable-optimizations")
 
 set(OPTIONS "${OPTIONS} ${OPTIONS_CROSS}")
