@@ -56,7 +56,7 @@
 }
 ```
 
-# vcpkg 使用 FFmpeg 5.1.2 的配置示例
+# vcpkg 使用 FFmpeg 7.1.4 的配置示例
 
 ## vcpkg.json
 
