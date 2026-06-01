@@ -1,0 +1,12 @@
+diff --git a/libavfilter/textutils.c b/libavfilter/textutils.c
+index 094d1aa2a8..9f0ae6f6bc 100644
+--- a/libavfilter/textutils.c
++++ b/libavfilter/textutils.c
+@@ -24,6 +24,7 @@
+ #include <fenv.h>
+ #include <math.h>
+ #include <string.h>
++#include "libavutil/time_internal.h"
+ 
+ #include "textutils.h"
+ #include "libavutil/avutil.h"

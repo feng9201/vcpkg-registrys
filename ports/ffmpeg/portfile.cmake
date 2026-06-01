@@ -8,6 +8,7 @@ vcpkg_from_github(
     HEAD_REF master
     PATCHES
         0013-define-WINVER.patch
+        0026-fix-missing-time-include.patch
 )
 
 if(SOURCE_PATH MATCHES " ")
