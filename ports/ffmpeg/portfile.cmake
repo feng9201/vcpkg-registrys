@@ -9,6 +9,7 @@ vcpkg_from_github(
     PATCHES
         0013-define-WINVER.patch
         0026-fix-missing-time-include.patch
+        0027-fix-ffextralibs-dedup.patch
 )
 
 if(SOURCE_PATH MATCHES " ")
