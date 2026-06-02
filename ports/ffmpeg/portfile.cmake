@@ -130,7 +130,7 @@ if(VCPKG_DETECTED_CMAKE_NM AND NOT (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET
     list(APPEND prog_env "${NM_path}")
 endif()
 
-if(VCPKG_DETECTED_CMAKE_AR)
+if(VCPKG_DETECTED_CMAKE_AR AND NOT (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW))
     get_filename_component(AR_path "${VCPKG_DETECTED_CMAKE_AR}" DIRECTORY)
     get_filename_component(AR_filename "${VCPKG_DETECTED_CMAKE_AR}" NAME)
     if(AR_filename MATCHES [[^(llvm-)?lib\.exe$]])
@@ -140,6 +140,17 @@ if(VCPKG_DETECTED_CMAKE_AR)
         set(ENV{AR} "${AR_filename}")
         string(APPEND OPTIONS " --ar='${AR_filename}'")
     endif()
+    list(APPEND prog_env "${AR_path}")
+endif()
+
+# On MSVC, pass --ar= to configure but do NOT set ENV{AR} for makedef.
+# makedef uses $AR with GNU ar 'rcs' syntax which is incompatible with
+# MSVC lib.exe. Without ENV{AR}, makedef falls through to 'lib.exe -out:'
+# which produces an MSVC-compatible .lib that dumpbin.exe can read.
+if(VCPKG_DETECTED_CMAKE_AR AND VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW)
+    get_filename_component(AR_path "${VCPKG_DETECTED_CMAKE_AR}" DIRECTORY)
+    get_filename_component(AR_filename "${VCPKG_DETECTED_CMAKE_AR}" NAME)
+    string(APPEND OPTIONS " --ar='${AR_filename}'")
     list(APPEND prog_env "${AR_path}")
 endif()
 
