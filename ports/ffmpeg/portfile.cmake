@@ -30,7 +30,7 @@ else()
     set(LIB_PATH_VAR "LIBRARY_PATH")
 endif()
 
-set(OPTIONS "--enable-pic --disable-doc --enable-debug --enable-runtime-cpudetect --disable-autodetect")
+set(OPTIONS "--enable-pic --disable-doc --enable-runtime-cpudetect --disable-autodetect")
 
 if(VCPKG_TARGET_IS_WINDOWS)
     vcpkg_acquire_msys(MSYS_ROOT PACKAGES automake1.16)
@@ -121,7 +121,7 @@ if(VCPKG_DETECTED_CMAKE_LINKER AND VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_
     list(APPEND prog_env "${LD_path}")
 endif()
 
-if(VCPKG_DETECTED_CMAKE_NM)
+if(VCPKG_DETECTED_CMAKE_NM AND NOT (VCPKG_TARGET_IS_WINDOWS AND NOT VCPKG_TARGET_IS_MINGW))
     get_filename_component(NM_path "${VCPKG_DETECTED_CMAKE_NM}" DIRECTORY)
     get_filename_component(NM_filename "${VCPKG_DETECTED_CMAKE_NM}" NAME)
     set(ENV{NM} "${NM_filename}")
