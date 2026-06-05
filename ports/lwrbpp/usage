@@ -1,0 +1,5 @@
+lwrbpp provides CMake targets:
+
+find_package(lwrbpp CONFIG REQUIRED)
+target_link_libraries(my_target PRIVATE lwrbpp::lwrbpp)
+# 然后即可 #include "lwrb/lwrb.hpp"
