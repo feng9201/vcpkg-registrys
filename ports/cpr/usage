@@ -1,0 +1,4 @@
+The package cpr provides CMake targets:
+
+    find_package(cpr CONFIG REQUIRED)
+    target_link_libraries(main PRIVATE cpr::cpr)
