@@ -13,7 +13,7 @@ vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/log-cpp
-    REF 81ff21bc25dfa8a3d5d97bda1b3070bc3a04922e #need to change
+    REF 1a47a8d486abcde33785be337c388ab1f7304ac4 #need to change
 )
 
 set(OPTIONS "")
