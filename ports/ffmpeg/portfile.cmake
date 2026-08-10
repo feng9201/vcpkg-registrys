@@ -8,6 +8,7 @@ vcpkg_from_github(
     HEAD_REF master
     PATCHES
         0013-define-WINVER.patch
+        0014-fix-flv-support-hevc.patch
         0026-fix-missing-time-include.patch
         0027-fix-ffextralibs-dedup.patch
 )
