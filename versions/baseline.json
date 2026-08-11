@@ -19,6 +19,10 @@
       "baseline": "1.0",
       "port-version": 0
     },
+    "x265": {
+      "baseline": "4.3",
+      "port-version": 0
+    },
     "mttool": {
       "baseline": "1.1.0",
       "port-version": 1
