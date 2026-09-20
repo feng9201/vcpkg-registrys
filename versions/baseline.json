@@ -4,8 +4,8 @@
       "baseline": "1.14.2"
     },
     "log-cpp": {
-      "baseline": "0.0.2",
-      "port-version": 4
+      "baseline": "1.0.0",
+      "port-version": 0
     },
     "x264": {
       "baseline": "0.164.3108",
