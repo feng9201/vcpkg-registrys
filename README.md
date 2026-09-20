@@ -125,7 +125,33 @@ int main() {
 # vcpkg 使用 mtpool 1.0.0 的配置示例
 
 源码：https://github.com/feng9201/mtPool  
-当前 baseline：`1.0.0`（port-version 0）。进程级 C++17 线程池；延迟任务和动态库都是可选 feature，默认都不开。
+当前 baseline：`1.0.0#1`（version 1.0.0，port-version 1）。进程级 C++17 线程池；延迟任务和动态库都是可选 feature，默认都不开。
+
+## port 号（port-version）
+
+vcpkg 里版本显示为 `1.0.0#1`，`#` 后面的数字就是 port-version：库源码没变、但 port 或源码修复有更新时递增。用它区分拉的是哪一版：
+
+| port-version | 内容 |
+|--------------|------|
+| `1.0.0#0` | 首个版本 |
+| `1.0.0#1` | Shutdown 丢弃未到期任务并唤醒等待者；`WaitUntilIdle` 去掉轮询；Cancel 立即唤醒调度，被取消/丢弃任务的 future 抛 `broken_promise` |
+
+不指定时默认装 baseline 指向的最新 port-version。要钉旧版用 `overrides`：
+
+```json
+{
+  "dependencies": [
+    "mtpool"
+  ],
+  "overrides": [
+    {
+      "name": "mtpool",
+      "version": "1.0.0",
+      "port-version": 0
+    }
+  ]
+}
+```
 
 ## features
 
@@ -179,7 +205,7 @@ int main() {
     {
       "kind": "git",
       "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "2730824e1581f6725045a64af43a8ce2c2418438",
+      "baseline": "fcb7929aa64c292de6a349172f493cfba591b816",
       "packages": ["mtpool"]
     }
   ]
