@@ -125,7 +125,7 @@ int main() {
 # vcpkg 使用 mtpool 1.0.0 的配置示例
 
 源码：https://github.com/feng9201/mtPool  
-当前 baseline：`1.0.0#2`（version 1.0.0，port-version 2）。进程级 C++17 线程池；延迟任务和动态库都是可选 feature，默认都不开。
+当前 baseline：`1.0.0#3`（version 1.0.0，port-version 3）。进程级 C++17 线程池；延迟任务和动态库都是可选 feature，默认都不开。
 
 ## port 号（port-version）
 
@@ -136,6 +136,7 @@ vcpkg 里版本显示为 `1.0.0#1`，`#` 后面的数字就是 port-version：�
 | `1.0.0#0` | 首个版本 |
 | `1.0.0#1` | Shutdown 丢弃未到期任务并唤醒等待者；`WaitUntilIdle` 去掉轮询；Cancel 立即唤醒调度，被取消/丢弃任务的 future 抛 `broken_promise` |
 | `1.0.0#2` | 延迟回调里调 `Shutdown()` / `WaitUntilIdle()` 立即抛 `std::logic_error`（debug 下 assert + stderr 日志），不再死锁 |
+| `1.0.0#3` | `ActiveCount()` 改 O(1) 计数；修复「`WaitUntilIdle` 等待中 Cancel 不及时唤醒」 |
 
 不指定时默认装 baseline 指向的最新 port-version。要钉旧版用 `overrides`：
 
@@ -206,7 +207,7 @@ vcpkg 里版本显示为 `1.0.0#1`，`#` 后面的数字就是 port-version：�
     {
       "kind": "git",
       "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "bb227c143f9d71b8c42d9c8813cf2c22f6e1d9b7",
+      "baseline": "a44d17e97c3e80d455cb7766889f1cc1b32e463e",
       "packages": ["mtpool"]
     }
   ]
