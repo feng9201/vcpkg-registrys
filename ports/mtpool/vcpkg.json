@@ -1,7 +1,7 @@
 {
     "name": "mtpool",
     "version": "1.0.0",
-    "port-version": 2,
+    "port-version": 3,
     "homepage": "https://github.com/feng9201/mtPool",
     "description": "Process-wide C++17 thread pool with optional delayed tasks",
     "license": "MIT",

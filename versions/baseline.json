@@ -25,7 +25,7 @@
     },
     "mtpool": {
       "baseline": "1.0.0",
-      "port-version": 2
+      "port-version": 3
     },
     "mttool": {
       "baseline": "1.1.0",
