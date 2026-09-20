@@ -87,7 +87,7 @@
 }
 ```
 
-和本仓其它包一起用时，把名字并进同一个 registry 即可，例如 `"packages": ["log-cpp", "ffmpeg", "mttool"]`。
+和本仓其它包一起用时，把名字并进同一个 registry 即可，例如 `"packages": ["log-cpp", "mtpool", "ffmpeg", "mttool"]`。
 
 ## CMake
 
@@ -120,6 +120,100 @@ int main() {
 ```
 
 格式必须用 `{}`，不要再用 `%s`。更完整的 named logger、去重、Qt 示例见源码仓 README。
+
+
+# vcpkg 使用 mtpool 1.0.0 的配置示例
+
+源码：https://github.com/feng9201/mtPool  
+当前 baseline：`1.0.0`（port-version 0）。进程级 C++17 线程池；延迟任务和动态库都是可选 feature，默认都不开。
+
+## features
+
+| feature | 作用 |
+|---------|------|
+| （无） | 只有线程池。链接方式跟 triplet：`x64-windows` → 动态，`x64-windows-static` → 静态 |
+| `shared` | 强制编成动态库（即使 triplet 是 static）。多模块共用一份 `pool()` / `delayed()` 时建议打开 |
+| `delayed` | 打开墙钟延迟任务：`mtPool::delayed().PostDelayedTask` / `SequenceToken` |
+
+可组合：`mtpool[delayed]`、`mtpool[shared]`、`mtpool[delayed,shared]`。
+
+注意：port 名是 `mtpool`，CMake 包名是 `mtPool`。
+
+## vcpkg.json
+
+需要延迟任务、多模块共用一份池：
+
+```json
+{
+  "dependencies": [
+    {
+      "name": "mtpool",
+      "features": ["delayed", "shared"]
+    }
+  ]
+}
+```
+
+只要线程池、链接方式跟 triplet：
+
+```json
+{
+  "dependencies": [
+    "mtpool"
+  ]
+}
+```
+
+## vcpkg-configuration.json
+
+`packages` 里必须列出 `mtpool`，否则会去默认 registry 找。`baseline` 用本仓已包含 `1.0.0` 的提交。
+
+```json
+{
+  "default-registry": {
+    "kind": "git",
+    "repository": "https://github.com/feng9201/vcpkg.git",
+    "baseline": "74a04a88ea10fc2bca3fbfa4eb15f4168a4da43e"
+  },
+  "registries": [
+    {
+      "kind": "git",
+      "repository": "https://github.com/feng9201/vcpkg-registrys.git",
+      "baseline": "2730824e1581f6725045a64af43a8ce2c2418438",
+      "packages": ["mtpool"]
+    }
+  ]
+}
+```
+
+和本仓其它包一起用时，把名字并进同一个 registry 即可，例如 `"packages": ["log-cpp", "mtpool", "ffmpeg", "mttool"]`。
+
+## CMake
+
+```cmake
+find_package(mtPool CONFIG REQUIRED)
+target_link_libraries(main PRIVATE mtPool::mtPool)
+```
+
+安装时的 `delayed` / `shared` 已写进 `mtPoolConfig.cmake` 和目标的接口宏（`MTPOOL_ENABLE_DELAYED`、`MTPOOL_SHARED`）。消费端不必再设 CMake option。未开 `delayed` 时不要调用 `mtPool::delayed()`。
+
+## 最小用法
+
+```cpp
+#include <mtPool/MtPool.h>
+
+int main() {
+    mtPool::pool().detach_task([] { /* 立即异步 */ });
+
+#if defined(MTPOOL_ENABLE_DELAYED)
+    mtPool::delayed().PostDelayedTask([] { /* 约 5s 后在线程池里跑 */ },
+                                      std::chrono::seconds(5));
+    mtPool::delayed().WaitUntilIdle();
+#endif
+}
+```
+
+更完整的 SequenceToken、Cancel、`SubmitDelayed` 见源码仓 README。
 
 
 # vcpkg 使用 FFmpeg 5.1.2 的配置示例
