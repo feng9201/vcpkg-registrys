@@ -1,9 +1,8 @@
 {
     "name": "log-cpp",
-    "version": "0.0.2",
-    "port-version": 4,
+    "version": "1.0.0",
     "homepage": "https://github.com/feng9201/log-cpp",
-    "description": "A sample C++ library for log",
+    "description": "Thin spdlog facade with per-sink levels, optional Qt and sqlite",
     "license": "MIT",
     "dependencies": [
         {
@@ -16,15 +15,25 @@
         },
         "spdlog"
     ],
+    "default-features": [],
     "features": {
+        "shared": {
+            "description": "Build as shared library. Without this feature, linkage follows the triplet."
+        },
         "sqlite": {
-            "description": "Enable sqlite",
+            "description": "Enable sqlite sink",
             "dependencies": [
                 "sqlitecpp"
             ]
         },
-        "shared": {
-            "description": "Enable shared library"
+        "qt": {
+            "description": "Enable QString/QByteArray fmt formatters",
+            "dependencies": [
+                {
+                    "name": "qt5-base",
+                    "default-features": false
+                }
+            ]
         }
     }
 }

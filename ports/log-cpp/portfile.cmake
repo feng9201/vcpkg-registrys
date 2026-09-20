@@ -1,42 +1,41 @@
-vcpkg_check_linkage(ONLY_STATIC_LIBRARY)
-
-# vcpkg_from_gitlab(
-#     GITLAB_URL http://git-inc.ovopark.com:6780
-#     OUT_SOURCE_PATH SOURCE_PATH
-#     REPO system/threadlibrary/log-cpp
-#     REF "${VERSION}"
-#     SHA512 0
-#     HEAD_REF init
-#     AUTHORIZATION_TOKEN Ng2qwPT14ZPo4HwWeJJu
-# )
-
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/log-cpp
-    REF 1a47a8d486abcde33785be337c388ab1f7304ac4 #need to change
+    REF 9c0e2702c4545b77c8f498b56e7606e36ca1084c
 )
-
-set(OPTIONS "")
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
         sqlite LOGCPP_SUPPORT_SQLITE
-        shared LOGCPP_BUILD_SHARED
+        qt     LOGCPP_ENABLE_QT
 )
+
+if("shared" IN_LIST FEATURES)
+    set(LOGCPP_BUILD_SHARED ON)
+    set(VCPKG_LIBRARY_LINKAGE dynamic)
+elseif(VCPKG_LIBRARY_LINKAGE STREQUAL "dynamic")
+    set(LOGCPP_BUILD_SHARED ON)
+else()
+    set(LOGCPP_BUILD_SHARED OFF)
+endif()
 
 vcpkg_cmake_configure(
     SOURCE_PATH "${SOURCE_PATH}"
-    NO_CHARSET_FLAG 
-    OPTIONS ${FEATURE_OPTIONS}
+    NO_CHARSET_FLAG
+    OPTIONS
+        ${FEATURE_OPTIONS}
+        -DLOGCPP_BUILD_SHARED=${LOGCPP_BUILD_SHARED}
+        -DLOGCPP_BUILD_TESTS=OFF
 )
 
 vcpkg_cmake_install()
+vcpkg_cmake_config_fixup(CONFIG_PATH lib/cmake/log-cpp)
+vcpkg_copy_pdbs()
 
-vcpkg_cmake_config_fixup(
-    CONFIG_PATH lib/cmake/log-cpp
+file(REMOVE_RECURSE
+    "${CURRENT_PACKAGES_DIR}/debug/include"
+    "${CURRENT_PACKAGES_DIR}/debug/share"
 )
-
-file(REMOVE_RECURSE "${CURRENT_PACKAGES_DIR}/debug/include")
 
 file(INSTALL "${CMAKE_CURRENT_LIST_DIR}/LICENSE" DESTINATION "${CURRENT_PACKAGES_DIR}/share/${PORT}" RENAME copyright)
 configure_file("${CMAKE_CURRENT_LIST_DIR}/usage" "${CURRENT_PACKAGES_DIR}/share/${PORT}/usage" COPYONLY)
