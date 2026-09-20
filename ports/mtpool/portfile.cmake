@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/mtPool
-    REF 4530dd7ee7b711e2cc364c1871c1aa511e870a6e
+    REF 45216b8843625799c240cfae17fdc16e0c157754
 )
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
