@@ -1,6 +1,7 @@
 {
     "name": "log-cpp",
     "version": "1.0.0",
+    "port-version": 1,
     "homepage": "https://github.com/feng9201/log-cpp",
     "description": "Thin spdlog facade with per-sink levels, optional Qt and sqlite",
     "license": "MIT",
