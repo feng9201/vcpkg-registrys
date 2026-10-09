@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/mttool
-    REF 8ef5c36c837d42480cb0fd5476865f596ae0c4bb
+    REF d021d098adc4a715498a4226ef27b7d4846cd9cb
 )
 
 set(ENABLE_EVENTPP OFF)
@@ -19,6 +19,16 @@ if("mpmc" IN_LIST FEATURES)
     set(ENABLE_MPMC ON)
 endif()
 
+set(ENABLE_MGENUM OFF)
+if("magicenum" IN_LIST FEATURES)
+    set(ENABLE_MGENUM ON)
+endif()
+
+set(ENABLE_OBS OFF)
+if("obs" IN_LIST FEATURES)
+    set(ENABLE_OBS ON)
+endif()
+
 # 清除 CMake 旧缓存，防止源路径变更后 cache 不匹配
 file(REMOVE "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/CMakeCache.txt")
 file(REMOVE_RECURSE "${CURRENT_BUILDTREES_DIR}/${TARGET_TRIPLET}-rel/CMakeFiles")
@@ -31,6 +41,8 @@ vcpkg_execute_required_process(
         -DMT_TOOL_ENABLE_EVENTPP=${ENABLE_EVENTPP}
         -DMT_TOOL_ENABLE_SPSC=${ENABLE_SPSC}
         -DMT_TOOL_ENABLE_MPMC=${ENABLE_MPMC}
+        -DMT_TOOL_ENABLE_MGENUM=${ENABLE_MGENUM}
+        -DMT_TOOL_ENABLE_OBS=${ENABLE_OBS}
     WORKING_DIRECTORY "${SOURCE_PATH}"
     LOGNAME configure
 )
