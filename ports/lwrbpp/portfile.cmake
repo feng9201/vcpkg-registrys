@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/lwrbpp
-    REF cfb13e4350dde68057bdf73f9f1cf82aa96d7088
+    REF 91816ef59b5ecbac8a2679c79a736d866f0938f1
 )
 
 set(LWRP_BUILD_DEMO OFF)
