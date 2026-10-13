@@ -1,7 +1,7 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/log-cpp
-    REF b8ae32d3db0b8a46faba6dc9ac6d92a72351b58a
+    REF 985250f8f95a3d64533ab5760a2d2cdc35cf6c14
 )
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
