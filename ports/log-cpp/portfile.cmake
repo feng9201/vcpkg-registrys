@@ -1,13 +1,12 @@
 vcpkg_from_git(
     OUT_SOURCE_PATH SOURCE_PATH
     URL https://github.com/feng9201/log-cpp
-    REF 985250f8f95a3d64533ab5760a2d2cdc35cf6c14
+    REF 6935099c58588ff2b5422a2ef3d59505080b2a7d
 )
 
 vcpkg_check_features(OUT_FEATURE_OPTIONS FEATURE_OPTIONS
     FEATURES
         sqlite LOGCPP_SUPPORT_SQLITE
-        qt     LOGCPP_ENABLE_QT
 )
 
 if("shared" IN_LIST FEATURES)

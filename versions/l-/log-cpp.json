@@ -28,6 +28,11 @@
             "version": "1.0.0",
             "git-tree": "634506c9fd633fdd20b81a7bd0ff23af23a952cd",
             "port-version": 2
+        },
+        {
+            "version": "1.0.0",
+            "git-tree": "35259a2b461588e94dc48ee0bb4b69883d187997",
+            "port-version": 3
         }
     ]
 }
