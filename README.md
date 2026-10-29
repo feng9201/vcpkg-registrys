@@ -85,7 +85,7 @@ Qt 的 `QString` / `QByteArray` formatter 是 header-only 的（源码里的 `w_
     {
       "kind": "git",
       "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "0c50ae6d8b6dc6abf5ae5c47f3a491083a735029",
+      "baseline": "75e0fa17317e43bd6e62d9cfb0e5d21554fa3b6c",
       "packages": ["log-cpp"]
     }
   ]
@@ -212,7 +212,7 @@ vcpkg 里版本显示为 `1.0.0#1`，`#` 后面的数字就是 port-version：�
     {
       "kind": "git",
       "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "a44d17e97c3e80d455cb7766889f1cc1b32e463e",
+      "baseline": "75e0fa17317e43bd6e62d9cfb0e5d21554fa3b6c",
       "packages": ["mtpool"]
     }
   ]
@@ -280,7 +280,7 @@ int main() {
     {
       "kind": "git",
       "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "1b4c81f762e9d2e92860d20d2e82e56227cfcc41",
+      "baseline": "75e0fa17317e43bd6e62d9cfb0e5d21554fa3b6c",
       "packages": ["ffmpeg"]
     }
   ]
@@ -305,7 +305,8 @@ int main() {
   "overrides": [
     {
       "name": "ffmpeg",
-      "version-string": "5.1.2#1"
+      "version": "5.1.2",
+      "port-version": 1
     }
   ]
 }
@@ -326,10 +327,13 @@ int main() {
   "overrides": [
     {
       "name": "ffmpeg",
-      "version-string": "7.1.4#0"
+      "version": "7.1.4",
+      "port-version": 0
     }
   ]
 }
 ```
 
 `versions/f-/ffmpeg.json` 按新→旧排列：`7.1.4#5`、`7.1.4#0`、`5.1.2#1`。
+
+`overrides` 里 `version` 和 `port-version` 是两个字段，`#` 只是显示用的后缀，不要把 `5.1.2#1` 整体写进 `version`。
