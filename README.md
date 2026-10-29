@@ -12,7 +12,11 @@
 # vcpkg 使用 log-cpp 1.0.0 的配置示例
 
 源码：https://github.com/feng9201/log-cpp  
-当前 baseline：`1.0.0`（port-version 0）。相对 0.0.2 是一次不兼容升级：格式从 `printf` 改为 fmt `{}`，必须显式 `init`，默认倾向动态库。
+当前 baseline：`1.0.0#5`（version 1.0.0，port-version 5）。相对 0.0.2 是一次不兼容升级：格式从 `printf` 改为 fmt `{}`，必须显式 `init`，默认倾向动态库。
+
+> 源码仓是私有的：port 用 `vcpkg_from_git` 直接拉 `feng9201/log-cpp`，构建机必须对它有读权限（CI 需配 deploy key 或 fine-grained token），否则 install 阶段会失败。
+>
+> 授权状态：未声明开源许可（proprietary / UNLICENSED），`vcpkg.json` 里的 `license` 因此为 `null`。对外分发二进制前先确认授权。
 
 ## features
 
@@ -20,10 +24,11 @@
 |---------|------|
 | （无） | 链接方式跟 triplet：`x64-windows` → 动态，`x64-windows-static` → 静态 |
 | `shared` | 强制编成动态库（即使 triplet 是 static）。多模块共用一份日志单例时建议打开 |
-| `qt` | 打开 `QString` / `QByteArray` 的 fmt formatter，并拉 `qt5-base` |
 | `sqlite` | 打开 SQLite sink，并拉 `sqlitecpp` |
 
-可组合：`log-cpp[shared,qt]`、`log-cpp[qt,sqlite]`。
+可组合：`log-cpp[shared]`、`log-cpp[sqlite]`、`log-cpp[shared,sqlite]`。
+
+Qt 的 `QString` / `QByteArray` formatter 是 header-only 的（源码里的 `w_log_cpp/qt_formatter.h`），不含构建步骤、也不拉 `qt5-base`：项目自己依赖 Qt 时直接 include 该头文件即可，所以没有 `qt` feature。
 
 ## vcpkg.json
 
@@ -32,13 +37,13 @@
   "dependencies": [
     {
       "name": "log-cpp",
-      "features": ["shared", "qt"]
+      "features": ["shared"]
     }
   ]
 }
 ```
 
-只要静态库、不要 Qt：
+只要静态库、链接方式跟 triplet：
 
 ```json
 {
@@ -96,7 +101,7 @@ find_package(log-cpp CONFIG REQUIRED)
 target_link_libraries(main PRIVATE log-cpp::log-cpp)
 ```
 
-安装时的 `shared` / `qt` / `sqlite` 已写进 `log-cppConfig.cmake`，消费端不必再设 `LOGCPP_BUILD_SHARED`、`LOGCPP_ENABLE_QT`。
+安装时的 `shared` / `sqlite` 已写进 `log-cppConfig.cmake`，消费端不必再设 `LOGCPP_BUILD_SHARED`、`LOGCPP_ENABLE_SQLITE`。
 
 ## 最小用法（1.0.0）
 
@@ -244,56 +249,11 @@ int main() {
 更完整的 SequenceToken、Cancel、`SubmitDelayed` 见源码仓 README。
 
 
-# vcpkg 使用 FFmpeg 5.1.2 的配置示例
+# vcpkg 使用 FFmpeg 的配置示例
 
-## vcpkg.json
+当前 baseline：`7.1.4#5`（version 7.1.4，port-version 5）。不写 `overrides` 时装的就是它。
 
-该文件定义了项目的依赖项，并通过 `overrides` 强制指定 FFmpeg 的版本为 `5.1.2#1`。
-
-```json
-
-{
-  "dependencies": [
-    {
-      "name": "ffmpeg",
-      "features": [
-        "ffmpeg"
-      ]
-    }
-  ],
-  "overrides": [
-    {
-      "name": "ffmpeg",
-      "version-string": "5.1.2#1"
-    }
-  ]
-}
-```
-
-## vcpkg-configuration.json
-```json
-{
-  "default-registry": {
-    "kind": "git",
-    "repository": "https://github.com/feng9201/vcpkg.git",
-    "baseline": "74a04a88ea10fc2bca3fbfa4eb15f4168a4da43e"
-  },
-  "registries": [
-    {
-      "kind": "git",
-      "repository": "https://github.com/feng9201/vcpkg-registrys.git",
-      "baseline": "e70b336fdd667c21444b2cee5fa26d7422ebe6ea",
-      "packages": ["ffmpeg"]
-    }
-  ]
-}
-```
-
-# vcpkg 使用 FFmpeg 7.1.4 的配置示例
-
-## vcpkg.json
-
-该文件定义了项目的依赖项，并通过 `overrides` 强制指定 FFmpeg 的版本为 `7.1.4#0`。
+## 默认版本 7.1.4#5
 
 ```json
 {
@@ -303,12 +263,6 @@ int main() {
       "features": [
         "ffmpeg"
       ]
-    }
-  ],
-  "overrides": [
-    {
-      "name": "ffmpeg",
-      "version-string": "7.1.4#0"
     }
   ]
 }
@@ -332,3 +286,50 @@ int main() {
   ]
 }
 ```
+
+## 钉旧版 5.1.2#1
+
+仍需要 5.1.2 时用 `overrides` 显式钉住：
+
+```json
+
+{
+  "dependencies": [
+    {
+      "name": "ffmpeg",
+      "features": [
+        "ffmpeg"
+      ]
+    }
+  ],
+  "overrides": [
+    {
+      "name": "ffmpeg",
+      "version-string": "5.1.2#1"
+    }
+  ]
+}
+```
+
+## 钉旧版 7.1.4#0
+
+```json
+{
+  "dependencies": [
+    {
+      "name": "ffmpeg",
+      "features": [
+        "ffmpeg"
+      ]
+    }
+  ],
+  "overrides": [
+    {
+      "name": "ffmpeg",
+      "version-string": "7.1.4#0"
+    }
+  ]
+}
+```
+
+`versions/f-/ffmpeg.json` 按新→旧排列：`7.1.4#5`、`7.1.4#0`、`5.1.2#1`。

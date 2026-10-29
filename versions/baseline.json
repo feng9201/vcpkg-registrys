@@ -5,15 +5,15 @@
     },
     "log-cpp": {
       "baseline": "1.0.0",
-      "port-version": 4
+      "port-version": 5
     },
     "x264": {
       "baseline": "0.164.3108",
       "port-version": 2
     },
     "ffmpeg": {
-      "baseline": "5.1.2",
-      "port-version": 1
+      "baseline": "7.1.4",
+      "port-version": 5
     },
     "getopt-win32": {
       "baseline": "1.0",
@@ -29,7 +29,7 @@
     },
     "mttool": {
       "baseline": "1.1.0",
-      "port-version": 3
+      "port-version": 4
     },
 	"lwrbpp":{
 	  "baseline": "1.0.0",
